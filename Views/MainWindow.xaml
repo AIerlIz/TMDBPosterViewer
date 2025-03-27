@@ -1,0 +1,124 @@
+<Window x:Class="TMDBPosterViewer.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TMDBPosterViewer.Views"
+        xmlns:vm="clr-namespace:TMDBPosterViewer.ViewModels"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="TMDB海报搜索工具" Height="1000" Width="1600"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="273"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- 左侧海报展示区域 -->
+        <Border Grid.Column="0" BorderBrush="#CCCCCC" BorderThickness="1" Margin="5">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding SelectedMedia.Posters}">
+                    <ItemsControl.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Key}" FontSize="18" FontWeight="Bold" Margin="5,10,5,5"/>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ItemsControl.GroupStyle>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="5" BorderBrush="#CCCCCC" BorderThickness="1" Background="White">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Image Source="{Binding FullImageUrl}" Width="200" Height="300" Stretch="Uniform">
+                                        <b:Interaction.Triggers>
+                                            <b:EventTrigger EventName="MouseDoubleClick">
+                                                <b:InvokeCommandAction Command="{Binding DataContext.DownloadPosterCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                       CommandParameter="{Binding}"/>
+                                            </b:EventTrigger>
+                                        </b:Interaction.Triggers>
+                                    </Image>
+                                    <TextBlock Grid.Row="1" Text="{Binding Language}" HorizontalAlignment="Center" Margin="0,5"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <!-- 右侧搜索区域 -->
+        <Border Grid.Column="1" BorderBrush="#CCCCCC" BorderThickness="1" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- 搜索框 -->
+                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                         Margin="10" Padding="5">
+                    <b:Interaction.Triggers>
+                        <b:KeyTrigger Key="Return">
+                            <b:InvokeCommandAction Command="{Binding SearchCommand}"/>
+                        </b:KeyTrigger>
+                    </b:Interaction.Triggers>
+                </TextBox>
+
+                <!-- 搜索结果列表 -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding SearchResults}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="5" BorderBrush="#CCCCCC" BorderThickness="1" Background="White"
+                                        Cursor="Hand">
+                                    <b:Interaction.Triggers>
+                                        <b:EventTrigger EventName="MouseLeftButtonDown">
+                                            <b:InvokeCommandAction Command="{Binding DataContext.LoadPostersCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                   CommandParameter="{Binding}"/>
+                                        </b:EventTrigger>
+                                    </b:Interaction.Triggers>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Source="{Binding PosterPath, StringFormat=https://image.tmdb.org/t/p/w92{0}}" 
+                                               Width="46" Height="69" Stretch="Uniform" Margin="5"/>
+                                        <StackPanel Grid.Column="1" Margin="5">
+                                            <TextBlock Text="{Binding Title}" TextWrapping="Wrap" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding OriginalTitle}" TextWrapping="Wrap" Foreground="Gray"/>
+                                            <TextBlock Text="{Binding MediaType, StringFormat=类型：{0}}" Foreground="Gray"/>
+                                            <TextBlock>
+                                                <Run Text="评分：" Foreground="Gray"/>
+                                                <Run Text="{Binding VoteAverage, StringFormat=F1}" Foreground="#FF4081"/>
+                                                <Run Text=" 推荐度：" Foreground="Gray"/>
+                                                <Run Text="{Binding VoteCount}" Foreground="#FF4081"/>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
