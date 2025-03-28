@@ -127,7 +127,7 @@ public partial class MainViewModel : ObservableObject
                     AspectRatio = poster["aspect_ratio"]?.Value<double>() ?? 0,
                     Height = poster["height"]?.Value<int>() ?? 0,
                     Width = poster["width"]?.Value<int>() ?? 0,
-                    FullImageUrl = _tmdbService.GetOriginalImageUrl(filePath)
+                    FullImageUrl = _tmdbService.GetPreviewImageUrl(filePath)
                 });
             }
 

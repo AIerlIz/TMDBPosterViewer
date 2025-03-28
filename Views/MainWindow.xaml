@@ -22,17 +22,8 @@
 
         <!-- 左侧海报展示区域 -->
         <Border Grid.Column="0" BorderBrush="#CCCCCC" BorderThickness="1" Margin="5">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding SelectedMedia.Posters}">
-                    <ItemsControl.GroupStyle>
-                        <GroupStyle>
-                            <GroupStyle.HeaderTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Key}" FontSize="18" FontWeight="Bold" Margin="5,10,5,5"/>
-                                </DataTemplate>
-                            </GroupStyle.HeaderTemplate>
-                        </GroupStyle>
-                    </ItemsControl.GroupStyle>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel/>
@@ -42,11 +33,7 @@
                         <DataTemplate>
                             <Border Margin="5" BorderBrush="#CCCCCC" BorderThickness="1" Background="White">
                                 <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Image Source="{Binding FullImageUrl}" Width="200" Height="300" Stretch="Uniform">
+                                    <Image Source="{Binding FullImageUrl}" Width="Auto" Height="280" Stretch="Uniform">
                                         <b:Interaction.Triggers>
                                             <b:EventTrigger EventName="MouseDoubleClick">
                                                 <b:InvokeCommandAction Command="{Binding DataContext.DownloadPosterCommand, RelativeSource={RelativeSource AncestorType=Window}}"
