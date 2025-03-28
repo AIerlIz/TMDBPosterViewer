@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:TMDBPosterViewer.ViewModels"
         xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="TMDB海报搜索工具" Height="1000" Width="1600"
+        Title="TMDB海报搜索工具" Height="700" Width="1117"
         WindowStartupLocation="CenterScreen">
     
     <Window.DataContext>
@@ -33,7 +33,7 @@
                         <DataTemplate>
                             <Border Margin="5" BorderBrush="#CCCCCC" BorderThickness="1" Background="White">
                                 <Grid>
-                                    <Image Source="{Binding FullImageUrl}" Width="Auto" Height="280" Stretch="Uniform">
+                                    <Image Source="{Binding FullImageUrl}" Width="Auto" Height="282" Stretch="Uniform">
                                         <b:Interaction.Triggers>
                                             <b:EventTrigger EventName="MouseDoubleClick">
                                                 <b:InvokeCommandAction Command="{Binding DataContext.DownloadPosterCommand, RelativeSource={RelativeSource AncestorType=Window}}"
@@ -41,7 +41,6 @@
                                             </b:EventTrigger>
                                         </b:Interaction.Triggers>
                                     </Image>
-                                    <TextBlock Grid.Row="1" Text="{Binding Language}" HorizontalAlignment="Center" Margin="0,5"/>
                                 </Grid>
                             </Border>
                         </DataTemplate>
@@ -86,16 +85,17 @@
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
-                                        <Image Source="{Binding PosterPath, StringFormat=https://image.tmdb.org/t/p/w92{0}}" 
-                                               Width="46" Height="69" Stretch="Uniform" Margin="5"/>
-                                        <StackPanel Grid.Column="1" Margin="5">
+                                        <Image Source="{Binding PosterPath, StringFormat=https://image.tmdb.org/t/p/w1{0}}" 
+                                               Width="Auto" Height="72" Stretch="Uniform" Margin="5"/>
+                                        <StackPanel Grid.Column="1" Margin="1">
                                             <TextBlock Text="{Binding Title}" TextWrapping="Wrap" FontWeight="Bold"/>
                                             <TextBlock Text="{Binding OriginalTitle}" TextWrapping="Wrap" Foreground="Gray"/>
-                                            <TextBlock Text="{Binding MediaType, StringFormat=类型：{0}}" Foreground="Gray"/>
+                                            <TextBlock Text="{Binding MediaType}" Foreground="Gray"/>
                                             <TextBlock>
-                                                <Run Text="评分：" Foreground="Gray"/>
+                                                <Run Text="评分:" Foreground="Gray"/>
                                                 <Run Text="{Binding VoteAverage, StringFormat=F1}" Foreground="#FF4081"/>
-                                                <Run Text=" 推荐度：" Foreground="Gray"/>
+                                                <Run Text=" | " Foreground="Gray"/>
+                                                <Run Text="热度:" Foreground="Gray"/>
                                                 <Run Text="{Binding VoteCount}" Foreground="#FF4081"/>
                                             </TextBlock>
                                         </StackPanel>
